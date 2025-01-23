@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let Go - Trail Impact Map</title>
+    
+    <!-- Mapbox GL JS -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="map-container">
+        <div id="map"></div>
+        <div class="impact-overlay">
+            <div class="impact-stats">
+                <h2>Trail Impact</h2>
+                <div class="stat">
+                    <span class="label">Total Miles</span>
+                    <span class="value" id="total-miles">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Donations Generated</span>
+                    <span class="value" id="total-donations">$0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Carbon Offset</span>
+                    <span class="value" id="carbon-offset">0 kg</span>
+                </div>
+            </div>
+        </div>
+        <div id="auth-overlay" class="auth-overlay" style="display: none;">
+            <button id="strava-auth" class="strava-button">Connect with Strava</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/strava.js"></script>
+    <script src="../js/maps.js"></script>
+    <script src="../js/impact.js"></script>
+    <script>
+        // Initialize components when the page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Strava integration
+            const strava = new StravaIntegration(
+                config.strava.clientId,
+                config.strava.clientSecret
+            );
+
+            // Initialize map
+            const map = new MapIntegration(
+                config.mapbox.accessToken,
+                'map'
+            );
+            map.initMap();
+
+            // Initialize impact tracker
+            const impactTracker = new ImpactTracker();
+
+            // Handle authentication
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            
+            async function loadActivities() {
+                try {
+                    const activities = await strava.getActivities();
+                    activities.forEach(activity => {
+                        map.addActivity(activity);
+                        impactTracker.trackActivity(activity);
+                    });
+                    map.fitToActivities();
+                    updateImpactDisplay(impactTracker.generateReport());
+                } catch (error) {
+                    console.error('Error loading activities:', error);
+                    showAuthOverlay();
+                }
+            }
+
+            function showAuthOverlay() {
+                const authOverlay = document.getElementById('auth-overlay');
+                const stravaAuthButton = document.getElementById('strava-auth');
+                
+                authOverlay.style.display = 'flex';
+                stravaAuthButton.addEventListener('click', () => {
+                    window.location.href = strava.initAuth();
+                });
+            }
+
+            if (code) {
+                // Handle the auth callback
+                await strava.handleAuthCallback(code)
+                    .then(() => loadActivities())
+                    .catch(error => {
+                        console.error('Auth error:', error);
+                        showAuthOverlay();
+                    });
+                
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else {
+                // Try to load activities with existing token
+                loadActivities();
+            }
+        });
+
+        // Update impact statistics display
+        function updateImpactDisplay(report) {
+            document.getElementById('total-miles').textContent = 
+                Math.round(report.totalImpact.totalMiles);
+            document.getElementById('total-donations').textContent = 
+                '$' + report.totalImpact.totalDonations.toFixed(2);
+            document.getElementById('carbon-offset').textContent = 
+                Math.round(report.totalImpact.totalCarbonOffset) + ' kg';
+        }
+    </script>
+</body>
+</html>

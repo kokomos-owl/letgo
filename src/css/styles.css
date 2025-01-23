@@ -1,0 +1,228 @@
+/* Main Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Map Container */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Impact Overlay */
+.impact-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.impact-stats {
+    min-width: 250px;
+}
+
+.impact-stats h2 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.stat:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: #666;
+}
+
+.value {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Map Markers */
+.marker {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.marker:hover {
+    transform: scale(1.2);
+}
+
+.marker-start {
+    background-color: #27AE60;
+}
+
+.marker-end {
+    background-color: #EB5757;
+}
+
+/* Activity Popup */
+.activity-popup {
+    padding: 8px;
+}
+
+.activity-popup h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.activity-popup .activity-type {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+.activity-popup .activity-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    font-size: 14px;
+}
+
+.activity-stats div {
+    text-align: center;
+    padding: 4px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+/* Marker Popup */
+.marker-popup {
+    text-align: center;
+}
+
+.marker-popup strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.marker-popup p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Map Controls */
+.mapboxgl-ctrl-group {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.mapboxgl-ctrl-group button {
+    width: 36px;
+    height: 36px;
+}
+
+.mapboxgl-ctrl-group button:focus {
+    box-shadow: none;
+}
+
+/* Activity Markers */
+.marker {
+    background-color: #FF4B4B;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* Popup Styles */
+.mapboxgl-popup {
+    max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Authentication Overlay */
+.auth-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.strava-button {
+    background-color: #FC4C02;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.strava-button:hover {
+    background-color: #E34402;
+}
+
+.strava-button:before {
+    content: '';
+    background-image: url('https://cdn.strava.com/assets/brands/strava/logo-strava-white.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .impact-overlay {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+    }
+
+    .impact-stats {
+        min-width: auto;
+    }
+}
